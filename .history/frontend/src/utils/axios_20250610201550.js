@@ -12,7 +12,7 @@ export const createAxiosInstance = () => {
   const token = getCookie("token"); 
 
   const instance = axios.create({
-    baseURL: "https://jobportaapplication.onrender.com/api/v1",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
   });
 
