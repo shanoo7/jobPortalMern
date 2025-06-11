@@ -1,9 +1,8 @@
-
 import { Job } from "../models/job.model.js";
 
-// STUDENT: Post a new job
+// STUDENT: POST A NEW JOB
 export const postJob = async (req, res) => {
-    
+
   try {
     // console.log("Incoming Job Payload:", req.body);
     const {
@@ -22,8 +21,8 @@ export const postJob = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!title || !description || !requirements || !salary || !location || 
-        !jobType || experienceLevel === undefined || !position || !company) {
+    if (!title || !description || !requirements || !salary || !location ||
+      !jobType || experienceLevel === undefined || !position || !company) {
       // console.log("Missing required fields:", req.body);
       return res.status(400).json({
         message: "All required fields must be provided",
@@ -69,145 +68,145 @@ export const postJob = async (req, res) => {
 
   } catch (error) {
     // console.error("Error in postJob:", error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: "Internal server error",
       error: error.message,
-      success: false 
+      success: false
     });
   }
 };
 
-// STUDENT: Get all jobs (with keyword search)
+// STUDENT:  GET ALL JOBS (WITH KEYWORD SEARCH)
 export const getAllJobs = async (req, res) => {
-    try {
-        const keyword = req.query.keyword || "";
-        // console.log("Search keyword:", keyword);
+  try {
+    const keyword = req.query.keyword || "";
+    // console.log("Search keyword:", keyword);
 
-        const query = {
-            $or: [
-                { title: { $regex: keyword, $options: "i" } },
-                { description: { $regex: keyword, $options: "i" } }
-            ]
-        };
+    const query = {
+      $or: [
+        { title: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } }
+      ]
+    };
 
-        const jobs = await Job.find(query)
-            .sort({ createdAt: -1 });
+    const jobs = await Job.find(query)
+      .sort({ createdAt: -1 });
 
-        // console.log("Jobs found:", jobs.length);
+    // console.log("Jobs found:", jobs.length);
 
-        if (!jobs || jobs.length === 0) {
-            return res.status(404).json({
-                message: "Jobs not found.",
-                success: false
-            });
-        }
-
-        return res.status(200).json({
-            jobs,
-            success: true
-        });
-    } catch (error) {
-        // console.error("Error in getAllJobs:", error);
-        return res.status(500).json({ message: "Internal server error", success: false });
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Jobs not found.",
+        success: false
+      });
     }
+
+    return res.status(200).json({
+      jobs,
+      success: true
+    });
+  } catch (error) {
+    // console.error("Error in getAllJobs:", error);
+    return res.status(500).json({ message: "Internal server error", success: false });
+  }
 };
 
-// STUDENT: Get a specific job by ID
+// STUDENT: GET A SPECIFIC JOB BY ID 
 export const getJobById = async (req, res) => {
-    try {
-        const jobId = req.params.id;
-        // console.log("Job ID to fetch:", jobId);
+  try {
+    const jobId = req.params.id;
+    // console.log("Job ID to fetch:", jobId);
 
-        const job = await Job.findById(jobId).populate("applications");
+    const job = await Job.findById(jobId).populate("applications");
 
-        if (!job) {
-            return res.status(404).json({
-                message: "Job not found.",
-                success: false
-            });
-        }
-
-        // console.log("Job found:", job);
-
-        return res.status(200).json({
-            job,
-            success: true
-        });
-    } catch (error) {
-        // console.error("Error in getJobById:", error);
-        return res.status(500).json({ message: "Internal server error", success: false });
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found.",
+        success: false
+      });
     }
+
+    // console.log("Job found:", job);
+
+    return res.status(200).json({
+      job,
+      success: true
+    });
+  } catch (error) {
+    // console.error("Error in getJobById:", error);
+    return res.status(500).json({ message: "Internal server error", success: false });
+  }
 };
 
-// ADMIN: Get all jobs created by current admin
+// ADMIN:  GET ALL JOBS CREATED BY CURRENT ADMIN
 export const getAdminJobs = async (req, res) => {
-    try {
-        const adminId = req.id;
-        // console.log("Admin ID:", adminId);
+  try {
+    const adminId = req.id;
+    // console.log("Admin ID:", adminId);
 
-        const jobs = await Job.find({ created_by: adminId })
-            .sort({ createdAt: -1 });
+    const jobs = await Job.find({ created_by: adminId })
+      .sort({ createdAt: -1 });
 
-        // console.log(`Jobs found for admin ${adminId}:`, jobs.length);
+    // console.log(`Jobs found for admin ${adminId}:`, jobs.length);
 
-        if (!jobs || jobs.length === 0) {
-            return res.status(404).json({
-                message: "Jobs not found.",
-                success: false
-            });
-        }
-
-        return res.status(200).json({
-            jobs,
-            success: true
-        });
-    } catch (error) {
-        // console.error("Error in getAdminJobs:", error);
-        return res.status(500).json({ message: "Internal server error", success: false });
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Jobs not found.",
+        success: false
+      });
     }
+
+    return res.status(200).json({
+      jobs,
+      success: true
+    });
+  } catch (error) {
+    // console.error("Error in getAdminJobs:", error);
+    return res.status(500).json({ message: "Internal server error", success: false });
+  }
 };
 
-// ADMIN: Update job open/close status
+// ADMIN: UPDATE JOB OPEN/CLOSE STATUS 
 export const updateJobStatus = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { isOpen } = req.body;
+  try {
+    const { id } = req.params;
+    const { isOpen } = req.body;
 
-        // console.log("Job ID for status update:", id);
-        // console.log("New isOpen value:", isOpen);
+    // console.log("Job ID for status update:", id);
+    // console.log("New isOpen value:", isOpen);
 
-        const job = await Job.findByIdAndUpdate(
-            id,
-            { isOpen },
-            { new: true }
-        );
+    const job = await Job.findByIdAndUpdate(
+      id,
+      { isOpen },
+      { new: true }
+    );
 
-        if (!job) {
-            return res.status(404).json({
-                message: "Job not found",
-                success: false
-            });
-        }
-
-        // console.log("Updated job status:", job);
-
-        return res.status(200).json({
-            message: "Job status updated",
-            job,
-            success: true
-        });
-    } catch (error) {
-        // console.error("Error in updateJobStatus:", error);
-        return res.status(500).json({
-            message: "Error updating job status",
-            success: false
-        });
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found",
+        success: false
+      });
     }
+
+    // console.log("Updated job status:", job);
+
+    return res.status(200).json({
+      message: "Job status updated",
+      job,
+      success: true
+    });
+  } catch (error) {
+    
+    return res.status(500).json({
+      message: "Error updating job status",
+      success: false
+    });
+  }
 };
 
 
 
-
+// ADMIN: UPDATE 
 export const updateJob = async (req, res) => {
   try {
     const { id } = req.params;

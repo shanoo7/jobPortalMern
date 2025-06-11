@@ -5,6 +5,7 @@ import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 
 
+// REGISTER USER
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
@@ -44,11 +45,17 @@ export const register = async (req, res) => {
       success: true
     });
   } catch (error) {
-    // console.log(error);
+    console.error("Error during user registration:", error);
+
+    return res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+      // error: error.message,
+      success: false,
+    });
   }
 }
 
-// Login user
+// LOGIN USER
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -95,17 +102,21 @@ export const login = async (req, res) => {
       profile: user.profile
     }
 
-    return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true,  sameSite: 'None' }).json({
+    return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' }).json({
       message: `Welcome back ${user.fullname}`,
       user,
       success: true
     })
   } catch (error) {
-    // console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+      // error: error.message,
+      success: false,
+    });
   }
-}
+};
 
-// Get user liked jobs
+// LIKED
 export const getLikedJobs = async (req, res) => {
   try {
     const user = await User.findById(req.id).populate("likedJobs");
@@ -115,7 +126,7 @@ export const getLikedJobs = async (req, res) => {
   }
 };
 
-// Like a job
+// LIKE JOB
 export const likeJob = async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -127,20 +138,20 @@ export const likeJob = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json({ 
-      message: "Job saved successfully", 
+    res.status(200).json({
+      message: "Job saved successfully",
       likedJobs: user.likedJobs,
-      success: true 
+      success: true
     });
   } catch (error) {
-    res.status(500).json({ 
-      message: "Failed to save job", 
-      success: false 
+    res.status(500).json({
+      message: "Failed to save job",
+      success: false
     });
   }
 };
 
-// Unlike a job
+// UNLIKE JOB
 export const unlikeJob = async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -152,21 +163,21 @@ export const unlikeJob = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json({ 
-      message: "Job removed from saved", 
+    res.status(200).json({
+      message: "Job removed from saved",
       likedJobs: user.likedJobs,
-      success: true 
+      success: true
     });
   } catch (error) {
-    res.status(500).json({ 
-      message: "Failed to remove job", 
-      success: false 
+    res.status(500).json({
+      message: "Failed to remove job",
+      success: false
     });
   }
 };
 
 
-// Logout user
+// LOGOUT USER
 export const logout = async (req, res) => {
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
@@ -174,11 +185,16 @@ export const logout = async (req, res) => {
       success: true
     })
   } catch (error) {
-    // console.log(error);
+  
+    return res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+      // error: error.message,
+      success: false,
+    });
   }
 }
 
-// Update user profile
+// UPDATE USER PROFILE
 export const updateProfile = async (req, res) => {
   try {
     // console.log('Request body:', req.body);
@@ -244,6 +260,7 @@ export const updateProfile = async (req, res) => {
     // console.error("Update profile error:", error);
     return res.status(500).json({
       message: "Internal server error",
+      // error: error.message,
       success: false
     });
   }
