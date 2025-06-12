@@ -19,7 +19,7 @@ function AppLayout() {
       <div className='grid-background'></div>
       <main className=' min-h-screen container mx-auto'>
         <Header />
-        <section className=' my-20'>
+        <section className=' my-20 px-3 md:px-0'>
           <Outlet />
         </section>
         <footer className='text-center text-gray-500 py-5 border-t-2 mt-10'>

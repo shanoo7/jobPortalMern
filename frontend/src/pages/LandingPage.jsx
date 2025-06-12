@@ -54,10 +54,12 @@ function LandingPage() {
 
       <div className="flex gap-6 justify-center">
         {/* Buttons with role-based click handlers */}
-        <Button className="cursor-pointer" variant="blue" size="xl" onClick={handleFindJobs}>
+        <Button className="h-14 px-8 py-2 text-lg font-lg md:h-20 md:px-20 md:text-2xl md:font-extrabold rounded-sm cursor-pointer"
+          variant="blue" size="xl" onClick={handleFindJobs}>
           Find Jobs
         </Button>
-        <Button className="cursor-pointer" variant="destructive" size="xl" onClick={handlePostJobs}>
+        <Button className=" bg-amber-700 hover:bg-amber-800 text-white h-14 px-8 py-2 text-lg font-lg md:h-20 md:px-20 md:text-2xl md:font-extrabold rounded-sm cursor-pointer"
+           size="xl" onClick={handlePostJobs}>
           Post Jobs
         </Button>
       </div>
@@ -108,7 +110,7 @@ function LandingPage() {
           ))}
         </Accordion>
       </section>
-     
+
     </main>
   )
 }

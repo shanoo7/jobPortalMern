@@ -56,18 +56,18 @@ function Header() {
 
   return (
     <>
-      <nav className="py-4 flex justify-between items-center border-b px-4 fixed top-0 left-0 right-0 bg-black/95">
+      <nav className="py-4 flex justify-between items-center border-b px-4 fixed top-0 z-50 left-0 right-0 bg-black/95">
         <Link to="/" className="flex items-center gap-2">
           <img
             src="https://cdn-icons-png.flaticon.com/512/17215/17215332.png"
             className="h-10"
-            alt="Hirrd Logo"
+            alt="Logo"
           />
         </Link>
 
         <div className="flex gap-4 cursor-pointer items-center">
           {!user && (
-            <Button className=" cursor-pointer" variant="outline" onClick={() => setShowSignIn(true)}>
+            <Button className=" cursor-pointer rounded-sm" variant="outline" onClick={() => setShowSignIn(true)}>
               Login
             </Button>
           )}
